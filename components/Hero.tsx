@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import shoe1 from "@/public/shoe1.png";
 import type { StaticImageData } from "next/image";
+import Link from "next/link";
 
 // Product data with images
 const products: { heading: string; name: string, image: string | StaticImageData; title: string }[] = [
@@ -57,16 +58,18 @@ const Hero: React.FC = () => {
         <h3 className="text-black font-bold text-lg sm:text-3xl font-mono">
           {products[currentIndex].title}
         </h3>
-        <h2 className="text-black font-extrabold text-2xl sm:text-5xl">
+        <h2 className="text-black font-extrabold text-4xl sm:text-9xl">
           {products[currentIndex].heading}
         </h2>
         <h1 className="text-[50px] sm:text-[170px] font-extrabold text-white">
           {products[currentIndex].name}
         </h1>
         <div className="flex justify-start mt-4 sm:mt-8">
-          <button className="text-white bg-red-500 p-2 sm:p-3 rounded-full">
+        <Link href={"/pages/HeadSetPage"}>
+          <button  className="text-white bg-red-500 p-2 sm:p-3 rounded-full">
             Shop by Category
           </button>
+          </Link>
         </div>
       </div>
 
