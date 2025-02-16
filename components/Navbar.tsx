@@ -10,32 +10,32 @@ const Navbar = () => {
   const [cartCount, setCartCount] = useState(0);
 
 
-  const fetchCartCount = async () => {
-    try {
-      const res = await fetch("/api/cart", { cache: "no-store" });
-      if (!res.ok) throw new Error("Failed to fetch cart");
-      const data = await res.json();
+  // const fetchCartCount = async () => {
+  //   try {
+  //     const res = await fetch("/api/cart", { cache: "no-store" });
+  //     if (!res.ok) throw new Error("Failed to fetch cart");
+  //     const data = await res.json();
       
 
-      const totalItems = data.reduce((acc: number, item: any) => acc + item.quantity, 0);
-      setCartCount(totalItems);
-    } catch (error) {
-      console.error("Error fetching cart count:", error);
-    }
-  };
+  //     const totalItems = data.reduce((acc: number, item: any) => acc + item.quantity, 0);
+  //     setCartCount(totalItems);
+  //   } catch (error) {
+  //     console.error("Error fetching cart count:", error);
+  //   }
+  // };
 
 
-  useEffect(() => {
-    fetchCartCount();
+  // useEffect(() => {
+  //   fetchCartCount();
 
-    const handleCartUpdate = () => fetchCartCount();
-    window.addEventListener("cartUpdated", handleCartUpdate);
+  //   const handleCartUpdate = () => fetchCartCount();
+  //   window.addEventListener("cartUpdated", handleCartUpdate);
   
-    return () => {
-      window.removeEventListener("cartUpdated", handleCartUpdate);
-    };
+  //   return () => {
+  //     window.removeEventListener("cartUpdated", handleCartUpdate);
+  //   };
 
-  }, []);
+  // }, []);
 
  
   const navLinks = [

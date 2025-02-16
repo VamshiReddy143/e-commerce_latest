@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/authOptions";
+import Order from "@/models/Order";
 import Cart from "@/models/Cart";
 
 
@@ -11,7 +12,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions); // Get the authenticated user's session
+    const session = await getServerSession(authOptions);
     if (!session?.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -23,26 +24,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
     }
 
-    if (
-      !cartItems.every(
-        (item: any) =>
-          item.productId &&
-          item.productId.name &&
-          item.productId.images &&
-          item.productId.price &&
-          item.quantity > 0
-      )
-    ) {
-      return NextResponse.json({ error: "Invalid cart items" }, { status: 400 });
-    }
-
-    // Construct line items
+    // Construct line items for Stripe
     const lineItems = cartItems.map((item: any) => ({
       price_data: {
         currency: "usd",
         product_data: {
           name: item.productId.name,
-          images: [item.productId.images?.[0] || "https://via.placeholder.com/150"], // Fallback image
+          images: [item.productId.images[0]],
         },
         unit_amount: Math.round(item.productId.price * 100), // Convert to cents
       },
@@ -64,8 +52,28 @@ export async function POST(req: Request) {
       cancel_url: `${baseUrl}/cart`,
     });
 
-    // Clear the cart after creating the session
-    await Cart.deleteMany({ userId: session.user.id }); // Delete all cart items for the user
+    // Save the order to the database
+    const order = new Order({
+      userId: session.user.id,
+      items: cartItems.map((item: any) => ({
+        productId: item.productId._id,
+        name: item.productId.name,
+        price: item.productId.price,
+        quantity: item.quantity,
+        size: item.size,
+        image: item.productId.images[0],
+      })),
+      totalAmount: cartItems.reduce(
+        (acc: number, item: any) => acc + item.productId.price * item.quantity,
+        0
+      ),
+      status: "Pending", // Default status
+    });
+
+    await order.save();
+
+    // Clear the cart
+    await Cart.deleteMany({ userId: session.user.id });
 
     return NextResponse.json({ sessionId: stripeSession.id });
   } catch (error: any) {
