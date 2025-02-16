@@ -3,6 +3,9 @@ import { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 import toast, { Toaster } from "react-hot-toast";
 import { FaTrash } from "react-icons/fa";
+import { loadStripe } from "@stripe/stripe-js";
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string);
 
 interface CartItem {
   _id: string;
@@ -40,6 +43,27 @@ const CartPage = () => {
     };
     fetchCart();
   }, []);
+
+
+  const handleCheckout = async () => {
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cartItems: cart }),
+      });
+
+      if (!res.ok) throw new Error("Failed to initiate checkout");
+
+      const { sessionId } = await res.json();
+      const stripe = await stripePromise;
+      if (stripe) await stripe.redirectToCheckout({ sessionId });
+
+    } catch (error) {
+      toast.error("Failed to process checkout. Please try again.");
+      console.error(error);
+    }
+  };
 
   const updateQuantity = async (cartItemId: string, newQuantity: number) => {
     if (newQuantity < 1) return;
@@ -180,7 +204,7 @@ const CartPage = () => {
               <span>Total</span>
               <span>${total.toFixed(2)} USD</span>
             </div>
-            <button className="bg-black text-white px-6 py-3 mt-4 rounded-lg w-full">
+            <button onClick={handleCheckout} className="bg-black text-white px-6 py-3 mt-4 rounded-lg w-full">
               Checkout Now
             </button>
           </div>
