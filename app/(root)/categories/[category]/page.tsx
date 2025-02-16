@@ -45,17 +45,18 @@ const CategoryPage = () => {
     <div className="text-black p-10">
       <h1 className="text-3xl font-bold mb-6 capitalize">{category} Collection</h1>
       {error && <p className="text-red-500">{error}</p>}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2  md:grid-cols-3 lg:grid-cols-5 gap-6">
         {products.length > 0 ? (
           products.map((product) => (
             <Link key={product._id} href={`/pages/products/${product._id}`} passHref>
-              <div className="cursor-pointer p-5 bg-white rounded-xl shadow-md hover:shadow-xl transition">
+              <div className="cursor-pointer p-5  rounded-xl ">
                 <Image
                   src={product.images[0]}
                   alt={product.name}
                   width={200}
                   height={200}
-                  className="h-[200px] w-[200px] object-contain rounded-lg"
+                  loading="lazy"
+                  className="h-[200px] w-[200px]  object-contain rounded-lg"
                 />
                 <h2 className="text-lg font-bold mt-2">{product.name}</h2>
                 <p className="text-xl font-semibold text-red-500">${product.price}</p>

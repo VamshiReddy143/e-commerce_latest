@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react"; // Client-side signIn
+import { signIn } from "next-auth/react"; 
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email format"),

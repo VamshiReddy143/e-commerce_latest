@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import { FaCartShopping } from "react-icons/fa6";
 import { usePathname } from "next/navigation";
@@ -7,14 +7,44 @@ import Link from "next/link";
 
 const Navbar = () => {
   const pathname = usePathname();
+  const [cartCount, setCartCount] = useState(0);
 
+
+  const fetchCartCount = async () => {
+    try {
+      const res = await fetch("/api/cart", { cache: "no-store" });
+      if (!res.ok) throw new Error("Failed to fetch cart");
+      const data = await res.json();
+      
+
+      const totalItems = data.reduce((acc: number, item: any) => acc + item.quantity, 0);
+      setCartCount(totalItems);
+    } catch (error) {
+      console.error("Error fetching cart count:", error);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchCartCount();
+
+    const handleCartUpdate = () => fetchCartCount();
+    window.addEventListener("cartUpdated", handleCartUpdate);
+  
+    return () => {
+      window.removeEventListener("cartUpdated", handleCartUpdate);
+    };
+
+  }, []);
+
+ 
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Shop", path: "/pages/shop" },
     { name: "About Us", path: "/about" },
     { name: "Blog", path: "/blog" },
     { name: "Contact Us", path: "/contact" },
-    {name:"Create",path:"/pages/createpage"}
+    { name: "Create", path: "/pages/createpage" }
   ];
 
   return (
@@ -38,11 +68,19 @@ const Navbar = () => {
         </ul>
       </div>
 
-      {/* Right Section: Login, Search, and Cart */}
       <div className="flex gap-4 sm:gap-6 items-center cursor-pointer">
         <p className="hidden sm:block">Login</p>
         <Search size={20} />
-        <FaCartShopping size={20} />
+
+      
+        <Link href={"/cart"} className="relative">
+          <FaCartShopping size={20} />
+          {cartCount > 0 && (
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+              {cartCount}
+            </span>
+          )}
+        </Link>
       </div>
 
       {/* Mobile Navigation (Hamburger Menu) */}

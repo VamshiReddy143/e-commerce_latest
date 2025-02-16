@@ -5,7 +5,7 @@ import "@/styles/globals.css";
 import Navbar from "@/components/Navbar";
 import SessionWrapper from "@/components/SessionWrapper";
 import { getServerSession } from "next-auth";
-import { authOptions } from "./auth/authOptions";
+import { authOptions } from "../auth/authOptions";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,15 +26,16 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
-const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <SessionWrapper session={session}>
-          
+          <div className="container sm:mx-auto">
+            <Navbar />
             {children}
-      
+          </div>
         </SessionWrapper>
       </body>
     </html>

@@ -15,15 +15,9 @@ const userSchema = new Schema<IUser>({
   image: { type: String, default: "" },
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: false }, 
+  password: { type: String, required: false },
   isAdmin: { type: Boolean, default: false },
-  cart: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Cart",
-      required: true,
-    },
-  ],
+
 });
 
 const User = mongoose.models.User || mongoose.model<IUser>("User", userSchema);
