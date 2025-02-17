@@ -12,7 +12,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import toast from "react-hot-toast";
-import { FaDownload } from "react-icons/fa";
+import Loader from "@/components/Loader";
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -41,38 +41,19 @@ const AdminDashboard = () => {
     fetchStats();
   }, []);
 
-//   const exportToCSV = (data: any[], filename: string) => {
-//     const csvContent =
-//       "data:text/csv;charset=utf-8," +
-//       [
-//         Object.keys(data[0]).join(","),
-//         ...data.map((item) => Object.values(item).join(",")),
-//       ].join("\n");
-
-//     const encodedUri = encodeURI(csvContent);
-//     const link = document.createElement("a");
-//     link.setAttribute("href", encodedUri);
-//     link.setAttribute("download", `${filename}.csv`);
-//     document.body.appendChild(link);
-//     link.click();
-//   };
-
-  if (loading)
+  if (loading) {
     return (
-      <p className="text-center mt-10 text-gray-700 dark:text-gray-300">
-        Loading dashboard...
-      </p>
-    );
-
+      <div className="flex items-center justify-center h-screen">
+        <Loader/>
+      </div>
+    )
+  }
   return (
     <div className="max-w-7xl mx-auto p-6 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 transition-colors duration-300">
-      {/* Header */}
-      <h1 className="text-4xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
-        Admin Dashboard
-      </h1>
+      
 
       {/* Overview Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6  ">
         <StatCard
           title="Total Revenue"
           value={`$${stats.totalRevenue.toFixed(2)}`}

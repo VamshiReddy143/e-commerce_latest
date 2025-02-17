@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
+import Loader from "@/components/Loader";
 
 interface OrderItem {
   _id: string;
@@ -50,7 +51,13 @@ const OrdersPage = () => {
     return <p className="text-center text-gray-500 mt-10">Please log in to view your orders.</p>;
   }
 
-  if (loading) return <p className="text-center text-gray-500 mt-10">Loading orders...</p>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader/>
+      </div>
+    )
+  }
 
   if (orders.length === 0) {
     return <p className="text-center text-gray-500 mt-10">You have no orders yet.</p>;

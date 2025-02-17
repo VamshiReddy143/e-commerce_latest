@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import Loader from "@/components/Loader";
 
 interface Product {
   _id: string;
@@ -39,7 +40,13 @@ const CategoryPage = () => {
     if (category) fetchProducts();
   }, [category]);
 
-  if (loading) return <p className="text-black text-center mt-10">Loading...</p>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader/>
+      </div>
+    )
+  }
 
   return (
     <div className="text-black p-10">

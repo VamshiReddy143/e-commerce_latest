@@ -1,4 +1,5 @@
 "use client";
+import Loader from "@/components/Loader";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -66,7 +67,13 @@ const AdminOrdersPage = () => {
     }
   };
 
-  if (loading) return <p className="text-center mt-10">Loading orders...</p>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader/>
+      </div>
+    )
+  }
 
   return (
     <div className="max-w-6xl text-gray-900 mx-auto p-6">

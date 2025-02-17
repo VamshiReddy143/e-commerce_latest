@@ -5,7 +5,6 @@ export interface IUser extends Document {
   email: string;
   password?: string; 
   isAdmin: boolean;
-  cart: Types.ObjectId[];
   image: string;
   googleId?: string;
 }

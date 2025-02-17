@@ -37,7 +37,12 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Invalid password");
         }
 
-        return { id: user._id.toString(), email: user.email, name: user.name };
+        return { 
+          id: user._id.toString(), 
+          email: user.email, 
+          name: user.name, 
+          isAdmin: user.isAdmin 
+        };
       },
     }),
     GoogleProvider({
@@ -58,15 +63,18 @@ export const authOptions: NextAuthOptions = {
             email: user?.email,
             name: user?.name,
             image: user?.image || "",
-            password: null, // No password for Google users
+            password: null, 
+            isAdmin: false, 
           });
         }
 
         token.id = existingUser._id.toString();
+        token.isAdmin = existingUser.isAdmin; // Add isAdmin here
       } else if (user) {
         token.id = user.id;
         token.email = user.email;
         token.name = user.name;
+        token.isAdmin = user?.isAdmin; // Add isAdmin here
       }
 
       return token;
@@ -77,6 +85,7 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.id as string;
         session.user.email = token.email as string;
         session.user.name = token.name as string;
+        session.user.isAdmin = token.isAdmin as boolean; // Add isAdmin here
       }
       return session;
     },
@@ -85,4 +94,3 @@ export const authOptions: NextAuthOptions = {
     signIn: "/login",
   },
 };
-

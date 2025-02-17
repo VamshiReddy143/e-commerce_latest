@@ -4,6 +4,8 @@ import Image from "next/image";
 import toast, { Toaster } from "react-hot-toast";
 import { FaTrash } from "react-icons/fa";
 import { loadStripe } from "@stripe/stripe-js";
+import emptycart from "@/public/cart.png"
+import Loader from "@/components/Loader";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string);
 
@@ -112,14 +114,25 @@ const CartPage = () => {
   const total = useMemo(() => subTotal - (subTotal * discount) / 100 + deliveryFee, [subTotal]);
 
   if (loading) {
-    return <p className="text-center text-black mt-10">Loading cart...</p>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader/>
+      </div>
+    )
   }
 
   return (
     <div className="max-w-9xl  mx-auto p-6">
       <h1 className="text-3xl text-gray-900  font-bold mb-6">Shopping Cart</h1>
       {cart.length === 0 ? (
-        <p className="text-black ">Your cart is empty.</p>
+        <div className="flex items-center justify-center">
+          <Image
+          src={emptycart}
+          alt="empty_cart"
+          height={400}
+          width={400}
+          />
+        </div>
       ) : (
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left Section - Cart Items Table */}

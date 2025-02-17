@@ -2,6 +2,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import Loader from "@/components/Loader";
 
 
 interface Product{
@@ -17,15 +19,16 @@ const useProducts = ()=>{
   const [loading,setLoading]=useState(true);
   const [error,setError]=useState<string|null>(null);
 
+  const searchParams = useSearchParams();
+  const query = searchParams.get("q") || "";
+
+
+  
 
   useEffect(()=>{
     const fetchProducts=async()=>{
       try {
-        const res = await fetch("/api/products", {
-          cache: "no-store",
-          headers: { "Content-Type": "application/json" },
-          method: "GET",
-        });
+        const res = await fetch(`/api/products?q=${query}`, { cache: "no-store" });
         if (!res.ok) throw new Error("Failed to fetch products");
 
         const data = await res.json();
@@ -37,7 +40,7 @@ const useProducts = ()=>{
       }
     }
     fetchProducts()
-  },[])
+  },[query])
 
   return {products,loading,error}
 }
@@ -46,7 +49,13 @@ const Page = () => {
   const {products,loading,error}=useProducts();
 
 
-  if (loading) return <p className="text-black text-center mt-10">Loading...</p>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader/>
+      </div>
+    )
+  }
   if (error)
     return <p className="text-red-500 text-center mt-10">Error: {error}</p>;
 

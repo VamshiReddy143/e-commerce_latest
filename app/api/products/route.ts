@@ -53,10 +53,17 @@ export async function POST(req: Request) {
 
 
 
-export async function GET() {
+export async function GET(req:Request) {
   try {
     await dbConnect();
-    const products = await ProductModel.find();
+    const { searchParams } = new URL(req.url);
+    const query = searchParams.get("q") || "";
+
+    let filter = {};
+    if (query) {
+      filter = { name: { $regex: query, $options: "i" } }; // Case-insensitive search
+    }
+    const products = await ProductModel.find(filter).select("name price images");
     return NextResponse.json({ products }, { status: 200 });
   } catch (error) {
     console.error(error);
