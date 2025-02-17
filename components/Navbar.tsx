@@ -39,7 +39,7 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = async () => {
-    await fetch("/api/auth/logout"); // Adjust logout API endpoint
+    await fetch("/api/auth/logout"); 
     setUser(null);
     router.push("/login");
   };
@@ -51,10 +51,8 @@ const Navbar = () => {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Shop", path: "/pages/shop" },
-    { name: "About Us", path: "/about" },
-    // { name: "Blog", path: "/blog" },
+    { name: "About Us", path: "/contactUs" },
     { name: "Contact Us", path: "/contact" },
-    // { name: "Create", path: "/pages/createpage" },
 
   ];
 
@@ -111,9 +109,11 @@ const Navbar = () => {
         {user ? (
           <div className="flex items-center gap-3">
             {/* User's First Letter Profile Icon */}
-            <div className="h-8 w-8 bg-red-500 text-white flex items-center justify-center rounded-full text-lg font-bold">
+           <Link href={"/profile"}>
+           <div className="h-8 w-8 bg-red-500 text-white flex items-center justify-center rounded-full text-lg font-bold">
               {user.name?.charAt(0).toUpperCase()}
             </div>
+           </Link>
             <button onClick={handleLogout} className="text-red-500 hover:text-red-700">
               Logout
             </button>

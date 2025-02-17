@@ -11,7 +11,7 @@ const products: { heading: string; name: string, image: string | StaticImageData
   {
     image:
       "https://prod4-sprcdn-assets.sprinklr.com/200052/5b5b94f9-3bab-4e6b-ac8f-2183c4218a27-361538681/370.png",
-    title: "Beats Solo Wireless",
+    title: "Beats Solo ",
     name: "HEADPHONE",
     heading: "Wireless",
   },
@@ -55,7 +55,7 @@ const Hero: React.FC = () => {
     <div className="bg-gray-200 p-4 sm:p-10 mt-10 rounded-[30px] relative">
       {/* Content Section */}
       <div className="flex flex-col mb-4 sm:mb-10 ml-4 sm:ml-10 p-4 sm:p-10">
-        <h3 className="text-black font-bold text-lg sm:text-3xl font-mono">
+        <h3 className="text-black font-bold text-lg sm:text-3xl ">
           {products[currentIndex].title}
         </h3>
         <h2 className="text-black font-extrabold text-4xl sm:text-9xl">
@@ -64,7 +64,7 @@ const Hero: React.FC = () => {
         <h1 className="text-[50px] sm:text-[170px] font-extrabold text-white">
           {products[currentIndex].name}
         </h1>
-        <div className="flex justify-start mt-4 sm:mt-8">
+        <div className="flex justify-start ">
         <Link href={"/pages/HeadSetPage"}>
           <button  className="text-white bg-red-500 p-2 sm:p-3 rounded-full">
             Shop by Category
