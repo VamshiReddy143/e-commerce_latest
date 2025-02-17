@@ -10,9 +10,9 @@ import bt from "@/public/bluetooth.png";
 
 const Category = () => {
   return (
-    <div className="mt-8">
+    <div className="mt-8 sm:p-0 p-4">
       {/* First Row */}
-      <div className="grid grid-cols-2 sm:flex gap-6">
+      <div className="grid grid-cols-1 sm:flex gap-6">
         <Link href="/categories/headphones">
           <div className="first bg-black cursor-pointer w-full sm:w-fit p-5 rounded-[30px] flex flex-col sm:flex-row items-center">
             <div className="text-center sm:text-left">
@@ -30,7 +30,7 @@ const Category = () => {
         <Link href="/categories/watches">
           <div className="first bg-yellow-400 cursor-pointer w-full sm:w-fit p-5 rounded-[30px] flex flex-col sm:flex-row items-center">
             <div className="text-center sm:text-left">
-              <p className="font-bold text-gray-500">Now</p>
+              <p className="font-bold text-gray-500">New</p>
               <h2 className="text-xl sm:text-2xl font-bold text-gray-400">Wear</h2>
               <h1 className="text-gray-700 font-extrabold font-sans text-5xl sm:text-6xl">Gadget</h1>
               <button className="bg-white text-yellow-900 p-3 mt-4 rounded-full">Explore</button>
@@ -57,7 +57,7 @@ const Category = () => {
       </div>
 
       {/* Second Row */}
-      <div className="grid grid-cols-2 sm:flex gap-6 mt-8">
+      <div className="grid grid-cols-1 sm:flex gap-6 mt-8">
         <Link href="/categories/gaming">
           <div className="first bg-gray-200 cursor-pointer w-full sm:w-[100%] p-5 rounded-[30px] flex flex-col sm:flex-row justify-between items-center">
             <div className="text-center sm:text-left">

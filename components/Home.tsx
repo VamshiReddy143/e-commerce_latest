@@ -3,6 +3,7 @@ import Hero from './Hero'
 import Category from './Category'
 import BestSeller from './BestSeller'
 import FooterSection from './FooterSection'
+import Headsetpage from '@/app/(root)/pages/HeadSetPage/page'
 
 
 
@@ -12,6 +13,7 @@ const Home = () => {
         <Hero/>
         <Category/>
         <BestSeller/>
+        <Headsetpage/>
         <FooterSection/>
        
         </div>

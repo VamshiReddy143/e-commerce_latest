@@ -1,62 +1,49 @@
 "use client";
-import {  useState } from "react";
-import AddProductForm from '@/components/AddProductForm';
-import OrdersPage from "@/app/(root)/orders/page";
-import AdminDashboard from "@/app/(root)/admin/dashboard/page";
+import { useState, Suspense, lazy } from "react";
+import Loader from "@/components/Loader";
 
-
+// Lazy load components
+const AdminDashboard = lazy(() => import("@/app/(root)/admin/dashboard/page"));
+const AddProductForm = lazy(() => import("@/components/AddProductForm"));
+const AdminOrdersPage = lazy(() => import("@/app/(root)/admin/orders/page"));
 
 const Analytics = () => {
-  const [activeSection, setActiveSection] = useState("create"); // Track active section
+  const [activeSection, setActiveSection] = useState("dashboard"); // Track active section
 
-
-
+  // Define sections dynamically
+  const sections = [
+    { name: "Dashboard", value: "dashboard" },
+    { name: "Create ", value: "create" },
+    { name: "Orders", value: "orders" },
+  ];
 
   return (
-    <div className="max-w-7xl mx-auto p-6 bg-white ">
+    <div className="dark:text-white mx-auto p-6">
       {/* Header */}
-      <div className="flex gap-10">
-      <h1
-          onClick={() => setActiveSection("dashboard")}
-          className={`text-4xl font-bold mb-6 cursor-pointer ${
-            activeSection === "dashboard"
-              ? "text-black border-b-4 border-red-400"
-              : "text-gray-700"
-          }`}
-        >
-          DashBoard
-        </h1>
-        <h1
-          onClick={() => setActiveSection("create")}
-          className={`text-4xl font-bold mb-6 cursor-pointer ${
-            activeSection === "create"
-              ? "text-black border-b-4 border-red-400"
-              : "text-gray-700"
-          }`}
-        >
-          Create Product
-        </h1>
-        <h1
-          onClick={() => setActiveSection("orders")}
-          className={`text-4xl font-bold mb-6 cursor-pointer ${
-            activeSection === "orders"
-              ? "text-black border-b-4 border-red-400"
-              : "text-gray-700"
-          }`}
-        >
-          Orders
-        </h1>
+      <div className="flex gap-10 overflow-x-auto sm:flex-wrap">
+        {sections.map((section) => (
+          <h1
+            key={section.value}
+            onClick={() => setActiveSection(section.value)}
+            className={`text-2xl sm:text-4xl font-bold mb-6 cursor-pointer transition-colors duration-300 ${
+              activeSection === section.value
+                ? "border-b-4 border-red-400 text-red-400"
+                : "text-gray-600 hover:text-gray-800 dark:hover:text-gray-300"
+            }`}
+          >
+            {section.name}
+          </h1>
+        ))}
       </div>
 
-
-
-     
-      {activeSection === "dashboard" && <AdminDashboard/>  }
-      {activeSection === "create" && <AddProductForm />} 
-      {activeSection === "orders" && <OrdersPage />}  
+      {/* Content */}
+      <Suspense fallback={<Loader />}>
+        {activeSection === "dashboard" && <AdminDashboard />}
+        {activeSection === "create" && <AddProductForm />}
+        {activeSection === "orders" && <AdminOrdersPage />}
+      </Suspense>
     </div>
   );
 };
 
-
-export default Analytics
+export default Analytics;

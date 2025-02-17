@@ -4,8 +4,9 @@ import Image from "next/image";
 import toast, { Toaster } from "react-hot-toast";
 import { FaTrash } from "react-icons/fa";
 import { loadStripe } from "@stripe/stripe-js";
-import emptycart from "@/public/cart.png"
+import emptycart from "@/public/cart.png";
 import Loader from "@/components/Loader";
+import { motion } from "framer-motion";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string);
 
@@ -26,8 +27,8 @@ const CartPage = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
-  const discount = 10; 
-  const deliveryFee = 50; 
+  const discount = 10;
+  const deliveryFee = 50;
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -46,7 +47,6 @@ const CartPage = () => {
     fetchCart();
   }, []);
 
-
   const handleCheckout = async () => {
     try {
       const res = await fetch("/api/checkout", {
@@ -60,7 +60,6 @@ const CartPage = () => {
       const { sessionId } = await res.json();
       const stripe = await stripePromise;
       if (stripe) await stripe.redirectToCheckout({ sessionId });
-
     } catch (error) {
       toast.error("Failed to process checkout. Please try again.");
       console.error(error);
@@ -82,7 +81,6 @@ const CartPage = () => {
           item._id === cartItemId ? { ...item, quantity: newQuantity } : item
         )
       );
-      // window.dispatchEvent(new Event("cartUpdated"));
       toast.success("Quantity updated");
     } catch (error) {
       toast.error((error as Error).message);
@@ -107,41 +105,40 @@ const CartPage = () => {
     }
   };
 
-  const subTotal = useMemo(
-    () => cart.reduce((acc, item) => acc + item.price * item.quantity, 0),
-    [cart]
-  );
+  const subTotal = useMemo(() => cart.reduce((acc, item) => acc + item.price * item.quantity, 0), [cart]);
   const total = useMemo(() => subTotal - (subTotal * discount) / 100 + deliveryFee, [subTotal]);
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <Loader/>
+        <Loader />
       </div>
-    )
+    );
   }
 
   return (
-    <div className="max-w-9xl  mx-auto p-6">
-      <h1 className="text-3xl text-gray-900  font-bold mb-6">Shopping Cart</h1>
+    <motion.div 
+      initial={{ opacity: 0, y: 10 }} 
+      animate={{ opacity: 1, y: 0 }} 
+      transition={{ duration: 0.5 }} 
+      className="  mx-auto p-6"
+    >
+      
+
       {cart.length === 0 ? (
-        <div className="flex items-center justify-center">
-          <Image
-          src={emptycart}
-          alt="empty_cart"
-          height={400}
-          width={400}
-          />
-        </div>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+          <div className="flex items-center justify-center">
+            <Image src={emptycart} alt="empty_cart" height={400} width={400} />
+          </div>
+        </motion.div>
       ) : (
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Left Section - Cart Items Table */}
-          <div className="flex-1">
-            <div className="border rounded-lg shadow-sm overflow-hidden">
+        <div className="flex flex-col   lg:flex-row gap-8">
+          <motion.div className="w-full" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}>
+            <div className="border dark:border-gray-500   rounded-lg shadow-lg overflow-hidden">
               <table className="w-full text-left">
-                <thead className="bg-gray-700">
+                <thead className="bg-gray-700 text-white">
                   <tr>
-                    <th className="p-4">Product Code</th>
+                    <th className="p-4">Product</th>
                     <th className="p-4 text-center">Quantity</th>
                     <th className="p-4 text-center">Total</th>
                     <th className="p-4 text-center">Action</th>
@@ -149,45 +146,24 @@ const CartPage = () => {
                 </thead>
                 <tbody>
                   {cart.map((item) => (
-                    <tr key={item._id} className="border-t">
+                    <tr key={item._id} className="border-t dark:border-gray-500 ">
                       <td className="p-4 flex items-center gap-4">
-                        <Image
-                          src={item.productId.images[0]}
-                          alt={item.productId.name}
-                          width={60}
-                          height={60}
-                          className="rounded-lg"
-                        />
+                        <Image src={item.productId.images[0]} alt={item.productId.name} width={60} height={60} className="rounded-lg" />
                         <div>
-                          <h2 className="text-lg text-black font-semibold">{item.productId.name}</h2>
-                          <p className="text-black">Size: {item.size}</p>
+                          <h2 className="text-lg font-semibold">{item.productId.name}</h2>
+                          <p className="text-sm text-gray-600">Size: {item.size}</p>
                         </div>
                       </td>
                       <td className="p-4 text-center">
                         <div className="flex items-center justify-center gap-2">
-                          <button
-                            className="bg-black px-2 py-1 rounded-lg disabled:opacity-50"
-                            disabled={updating}
-                            onClick={() => updateQuantity(item._id, item.quantity - 1)}
-                          >
-                            -
-                          </button>
-                          <span className=" text-black text-lg">{item.quantity}</span>
-                          <button
-                            className="bg-black px-2 py-1 rounded-lg disabled:opacity-50"
-                            disabled={updating}
-                            onClick={() => updateQuantity(item._id, item.quantity + 1)}
-                          >
-                            +
-                          </button>
+                          <button className="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded-lg" disabled={updating} onClick={() => updateQuantity(item._id, item.quantity - 1)}> - </button>
+                          <span className="text-lg">{item.quantity}</span>
+                          <button className="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded-lg" disabled={updating} onClick={() => updateQuantity(item._id, item.quantity + 1)}> + </button>
                         </div>
                       </td>
-                      <td className="p-4 text-center text-red-400 text-lg font-bold">${item.price}</td>
+                      <td className="p-4 text-center text-lg font-bold text-red-500">${item.price}</td>
                       <td className="p-4 text-center">
-                        <button
-                          className="text-red-500 hover:text-red-700"
-                          onClick={() => removeItem(item._id)}
-                        >
+                        <button className="text-red-500 hover:text-red-700" onClick={() => removeItem(item._id)}>
                           <FaTrash size={18} />
                         </button>
                       </td>
@@ -196,35 +172,26 @@ const CartPage = () => {
                 </tbody>
               </table>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Right Section - Order Summary */}
-          <div className="lg:w-96 sm:h-fit border border-gray-700 rounded-lg p-6  shadow-sm">
-            <h2 className="text-xl text-gray-900 font-bold mb-4">Order Summary</h2>
-            <div className="flex text-gray-900  justify-between mb-2">
-              <span>Sub Total</span>
-              <span>${subTotal.toFixed(2)} USD</span>
-            </div>
-            <div className="flex justify-between text-gray-900  mb-2">
-              <span>Discount ({discount}%)</span>
-              <span>-${((subTotal * discount) / 100).toFixed(2)} USD</span>
-            </div>
-            <div className="flex justify-between text-gray-900  mb-2">
-              <span>Delivery Fee</span>
-              <span>${deliveryFee.toFixed(2)} USD</span>
-            </div>
-            <div className="flex justify-between text-gray-900  font-bold text-lg mt-4">
-              <span>Total</span>
-              <span>${total.toFixed(2)} USD</span>
-            </div>
-            <button onClick={handleCheckout} className="bg-black text-white px-6 py-3 mt-4 rounded-lg w-full">
-              Checkout Now
-            </button>
-          </div>
+          {/* Order Summary */}
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.5 }} 
+            className="lg:w-80 p-6 border dark:border-gray-500 flex flex-col gap-2 rounded-lg shadow-lg"
+          >
+            <h2 className="text-xl font-bold mb-4">Order Summary</h2>
+            <p>Subtotal: <strong>${subTotal.toFixed(2)}</strong></p>
+            <p>Discount: <strong>-${((subTotal * discount) / 100).toFixed(2)}</strong></p>
+            <p>Delivery Fee: <strong>${deliveryFee}</strong></p>
+            <p className="text-lg font-bold mt-3">Total: <strong>${total.toFixed(2)}</strong></p>
+            <button className="bg-black text-white dark:bg-gray-700 rounded-xl px-4 py-2 w-full mt-4 " onClick={handleCheckout}>Checkout</button>
+          </motion.div>
         </div>
       )}
       <Toaster />
-    </div>
+    </motion.div>
   );
 };
 

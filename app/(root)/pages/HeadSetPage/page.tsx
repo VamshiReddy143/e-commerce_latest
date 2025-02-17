@@ -2,9 +2,9 @@ import Image from 'next/image'
 import React from 'react'
 import headset from "@/public/headset.png"
 
-const page = () => {
+const Headsetpage = () => {
     return (
-        <div className='mt-[7em]'>
+        <div className='mt-[10em] hidden sm:block'>
             <div className='bg-red-500 flex justify-between rounded-[30px] p-[2em] pl-[5em] pr-[5em]'>
                 <div>
                     <p className='text-xl font-bold'>20% off</p>
@@ -20,7 +20,7 @@ const page = () => {
                     <p>Company that grown from a small startup to one of the world&apos;s leading tech companies</p>
                 </div>
             </div>
-            <div className='absolute top-10 right-[50%]'>
+            <div className='absolute hidden sm:block top-[147em] right-[40em]'>
                     <Image
                     src={headset}
                     alt='headset'
@@ -34,4 +34,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Headsetpage

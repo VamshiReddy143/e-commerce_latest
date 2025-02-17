@@ -52,7 +52,7 @@ const Hero: React.FC = () => {
   }, []);
 
   return (
-    <div className="bg-gray-200 p-4 sm:p-10 mt-10 rounded-[30px] relative">
+    <div className="bg-gray-200  sm:p-10 mt-10 rounded-[30px] relative">
       {/* Content Section */}
       <div className="flex flex-col mb-4 sm:mb-10 ml-4 sm:ml-10 p-4 sm:p-10">
         <h3 className="text-black font-bold text-lg sm:text-3xl ">
@@ -65,7 +65,7 @@ const Hero: React.FC = () => {
           {products[currentIndex].name}
         </h1>
         <div className="flex justify-start ">
-        <Link href={"/pages/HeadSetPage"}>
+        <Link href={"/pages/shop"}>
           <button  className="text-white bg-red-500 p-2 sm:p-3 rounded-full">
             Shop by Category
           </button>
@@ -74,14 +74,14 @@ const Hero: React.FC = () => {
       </div>
 
       {/* Sliding Product Image */}
-      <div className="absolute top-[10px] right-[10px] sm:right-[50px] transition-opacity duration-700 ease-in-out opacity-100">
+      <div className="absolute top-[17px] right-[14px] sm:right-[50px] transition-opacity duration-700 ease-in-out opacity-100">
         <Image
           key={currentIndex}
           src={products[currentIndex].image}
           alt={products[currentIndex].title}
           width={200}
           height={200}
-          className="h-[15em] w-[15em] sm:h-[40em] sm:w-[40em]"
+          className="h-[10em] w-[10em] sm:h-[40em] sm:w-[40em]"
         />
       </div>
 

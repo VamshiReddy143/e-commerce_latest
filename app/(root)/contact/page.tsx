@@ -40,7 +40,7 @@ export default function Home() {
     toast.success("message sent successfully")
   }
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen dark:bg-black dark:text-white text-black bg-white">
       {/* Contact Section */}
       <section className=" mx-auto px-4 py-16">
         <div className="text-center mb-12">
@@ -52,19 +52,19 @@ export default function Home() {
 
         <div className="grid md:grid-cols-2 gap-12">
           {/* Contact Form */}
-          <div className="bg-gray-100 p-8 rounded-lg">
+          <div className="bg-gray-100  dark:bg-gray-800 p-8 rounded-[30px]">
             <h2 className="text-2xl font-semibold mb-6">Get in Touch with Us</h2>
             <form className="space-y-4 ">
               <div className="grid grid-cols-2  gap-4">
-                <Input name="name" value={formData.name} onChange={handleChange} className="bg-white p-4" placeholder="Input your name" />
-                <Input name="email" value={formData.email}  onChange={handleChange} className="bg-white p-4"  placeholder="Input your email" />
+                <Input name="name" value={formData.name} onChange={handleChange} className="bg-white dark:bg-gray-800  dark:border-gray-500 p-5 rounded-xl" placeholder="Input your name" />
+                <Input name="email" value={formData.email}  onChange={handleChange} className="bg-white  dark:bg-gray-800  dark:border-gray-500 p-5 rounded-xl"  placeholder="Input your email" />
               </div>
-              <Input name="subject" value={formData.subject} onChange={handleChange} className="bg-white p-4"  placeholder="Subject" />
+              <Input name="subject" value={formData.subject} onChange={handleChange} className="bg-white  dark:bg-gray-800  dark:border-gray-500 p-5 rounded-xl"  placeholder="Subject" />
               <Textarea name="message"  value={formData.message} onChange={handleChange}
                 placeholder="Submit your message request"
-                className="h-32 bg-white p-4"
+                className="h-32 bg-white  dark:bg-gray-800  dark:border-gray-500 p-5 rounded-xl"
               />
-              <Button onClick={message} className="bg-black text-white hover:bg-gray-800">
+              <Button onClick={message} className="bg-black text-white dark:bg-gray-500 rounded-xl p-5 dark:text-white">
                 Send message
               </Button>
             </form>
@@ -133,7 +133,7 @@ export default function Home() {
       </section>
 
       {/* FAQ Section */}
-      <section className=" mx-auto px-4 py-16 bg-gray-50">
+      <section className=" mx-auto dark:bg-black px-4 py-16 bg-gray-50">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
             <div className="text-center md:text-left mb-8">

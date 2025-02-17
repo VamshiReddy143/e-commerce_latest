@@ -17,7 +17,7 @@ export async function GET() {
     return NextResponse.json({ error: "Access Denied" }, { status: 403 });
   }
 
-  const orders = await Order.find().populate("userId", "name email");
+  const orders = await Order.find().populate("userId", "name email").sort({createdAt:-1})
   return NextResponse.json(orders);
 }
 

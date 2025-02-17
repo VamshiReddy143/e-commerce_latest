@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import SessionWrapper from "@/components/SessionWrapper";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/authOptions";
+import ThemeProvider from "@/context/theme";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,13 +30,16 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
 
   return (
-    <html lang="en">
+    <html suppressHydrationWarning lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <SessionWrapper session={session}>
-          <div className="container sm:mx-auto">
-            <Navbar />
-            {children}
-          </div>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <div className="container sm:mx-auto">
+              <Navbar />
+              {children}
+
+            </div>
+          </ThemeProvider>
         </SessionWrapper>
       </body>
     </html>

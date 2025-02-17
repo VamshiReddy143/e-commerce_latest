@@ -10,7 +10,7 @@ import sale from "@/public/sale.jpg"
 
 export default function Home() {
   return (
-    <main className="min-h-screen  bg-white">
+    <main className="min-h-screen dark:bg-black bg-white">
       {/* Hero Section */}
       <section className=" mx-auto px-4 py-16">
         <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -76,7 +76,7 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="bg-gray-50 py-16">
+      <section className="bg-gray-50 dark:bg-black py-16">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
             <p className="text-sm font-semibold text-gray-500 uppercase mb-2">ACHIEVEMENTS</p>
