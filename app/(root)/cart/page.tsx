@@ -7,6 +7,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import emptycart from "@/public/cart.png";
 import Loader from "@/components/Loader";
 import { motion } from "framer-motion";
+import BestSeller from "@/components/BestSeller";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string);
 
@@ -190,6 +191,10 @@ const CartPage = () => {
           </motion.div>
         </div>
       )}
+
+      <div>
+        <BestSeller/>
+      </div>
       <Toaster />
     </motion.div>
   );

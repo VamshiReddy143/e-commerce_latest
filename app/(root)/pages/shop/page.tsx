@@ -107,6 +107,44 @@ const Page = () => {
                 />
                 <h1 className="text-xl mt-2">{product.name}</h1>
                 <p className="text-2xl font-bold mt-1">${product.price}</p>
+
+
+
+
+
+
+                <div className="flex items-center mt-2">
+                  {product.reviews?.length > 0 ? (
+                    <>
+                      {/* Compute average rating */}
+                      {(() => {
+                        const avgRating =
+                          product.reviews.reduce((acc, r) => acc + r.rating, 0) / product.reviews.length;
+
+                        const fullStars = Math.floor(avgRating); // Number of full stars
+                        const halfStar = avgRating % 1 >= 0.5 ? 1 : 0; // Half star condition
+                        const emptyStars = 5 - fullStars - halfStar; // Remaining empty stars
+
+                        return (
+                          <p className="text-yellow-500 text-2xl flex">
+                            {"⭐".repeat(fullStars)}
+                            {halfStar ? "⭐" : ""}
+                            {"☆".repeat(emptyStars)}
+                          </p>
+                        );
+                      })()}
+                      <p className="ml-2 text-gray-700 dark:text-gray-300 text-lg">
+                        ({product.reviews.length} {product.reviews.length > 1 ? "reviews" : "review"})
+                      </p>
+                    </>
+                  ) : (
+                    <p className="text-gray-500 text-2xl">{"☆".repeat(5)}</p> // Empty stars when no reviews
+                  )}
+                </div>
+
+
+
+
               </div>
             </Link>
           ))}

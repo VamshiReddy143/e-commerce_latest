@@ -63,7 +63,7 @@ export async function GET(req:Request) {
     if (query) {
       filter = { name: { $regex: query, $options: "i" } }; // Case-insensitive search
     }
-    const products = await ProductModel.find(filter).select("name price images");
+    const products = await ProductModel.find(filter).select("name reviews price images");
     return NextResponse.json({ products }, { status: 200 });
   } catch (error) {
     console.error(error);

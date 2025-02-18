@@ -21,7 +21,7 @@ export async function GET(req: NextRequest, { params }: { params: { category?: s
     }
 
     // Fetch products by category
-    const products = await ProductModel.find({ category });
+    const products = await ProductModel.find({ category }).populate("reviews")
 
     return NextResponse.json(products, { status: 200 });
   } catch (error) {

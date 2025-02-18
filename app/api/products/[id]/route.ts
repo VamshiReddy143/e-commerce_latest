@@ -12,7 +12,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       return NextResponse.json({ message: "Invalid product ID" }, { status: 400 });
     }
 
-    const product = await ProductModel.findById(id);
+    const product = await ProductModel.findById(id).populate("reviews.rating")
     if (!product) {
       return NextResponse.json({ message: "Product not found" }, { status: 404 });
     }
