@@ -3,7 +3,7 @@ import React from "react";
 
 const Loader = () => {
   return (
-    <div className="flex items-center justify-center w-fit h-fit">
+    <div className="flex items-center justify-center w-fit h-screen">
       <div className="w-[200px] h-[100px] flex flex-col relative items-center justify-end overflow-x-hidden">
         {/* Truck Body */}
         <div className="w-[130px] mb-[6px] animate-motion">

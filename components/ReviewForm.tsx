@@ -38,7 +38,7 @@ const ReviewForm = ({ productId, onReviewAdded }: { productId: string; onReviewA
   return (
     <motion.form
       onSubmit={handleSubmitReview}
-      className="mt-6 w-full max-w-lg border p-6 rounded-lg shadow-lg bg-gray-100 dark:bg-gray-800"
+      className="mt-6 w-full max-w-lg border dark:border-gray-700 p-6 rounded-lg shadow-lg bg-gray-100 dark:bg-gray-900"
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -76,7 +76,7 @@ const ReviewForm = ({ productId, onReviewAdded }: { productId: string; onReviewA
 
       <motion.button
         type="submit"
-        className="mt-4 bg-red-500 text-white px-6 py-3 rounded-lg w-full font-semibold transition hover:bg-red-600 disabled:opacity-50"
+        className="mt-4 bg-red-700 text-white px-6 py-3 rounded-xl w-full font-semibold transition hover:bg-red-600 "
         disabled={loading || rating === 0}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}

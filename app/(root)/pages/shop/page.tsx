@@ -1,46 +1,13 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import React, { useMemo, useState } from "react";
+
 import Loader from "@/components/Loader";
+import { useProducts } from "@/app/hooks/useProducts";
 
-interface Product {
-  _id: string;
-  name: string;
-  price: number;
-  images: string[];
-}
 
-const useProducts = (page: number, sortBy: string) => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  const searchParams = useSearchParams();
-  const query = searchParams.get("q") || "";
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch(`/api/products?q=${query}&page=${page}&limit=12&sort=${sortBy}`, {
-          cache: "no-store",
-        });
-        if (!res.ok) throw new Error("Failed to fetch products");
-
-        const data = await res.json();
-        setProducts(data.products);
-      } catch (error) {
-        setError((error as Error).message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
-  }, [query, page, sortBy]);
-
-  return { products, loading, error };
-};
 
 const Page = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -55,13 +22,21 @@ const Page = () => {
     });
   }, [sortBy, products]);
 
+  const getRatingStars = (reviews: { rating: number }[]) => {
+    if (!reviews?.length) return "☆☆☆☆☆";
+
+    const avgRating = reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length;
+    return "⭐".repeat(Math.floor(avgRating)) + (avgRating % 1 >= 0.5 ? "⭐" : "") + "☆".repeat(5 - Math.floor(avgRating) - (avgRating % 1 >= 0.5 ? 1 : 0));
+  };
+
+
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= Math.ceil(products.length / pageLimit)) {
       setCurrentPage(newPage);
     }
   };
 
-  // Handle sorting change
+
   const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSortBy(event.target.value);
   };
@@ -69,13 +44,13 @@ const Page = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
+
         <Loader />
       </div>
     );
   }
 
   if (error) return <p className="text-red-500 text-center mt-10">Error: {error}</p>;
-
   return (
     <div className="mx-auto mb-[6em] p-6">
       {/* Sorting Options */}
@@ -118,24 +93,24 @@ const Page = () => {
                     <>
                       {/* Compute average rating */}
                       {(() => {
-                        const avgRating =
-                          product.reviews.reduce((acc, r) => acc + r.rating, 0) / product.reviews.length;
+                        // const avgRating =
+                        //   product.reviews.reduce((acc, r) => acc + r.rating, 0) / product.reviews.length;
 
-                        const fullStars = Math.floor(avgRating); // Number of full stars
-                        const halfStar = avgRating % 1 >= 0.5 ? 1 : 0; // Half star condition
-                        const emptyStars = 5 - fullStars - halfStar; // Remaining empty stars
+                        // const fullStars = Math.floor(avgRating); // Number of full stars
+                        // const halfStar = avgRating % 1 >= 0.5 ? 1 : 0; // Half star condition
+                        // const emptyStars = 5 - fullStars - halfStar; // Remaining empty stars
 
                         return (
-                          <p className="text-yellow-500 text-2xl flex">
-                            {"⭐".repeat(fullStars)}
-                            {halfStar ? "⭐" : ""}
-                            {"☆".repeat(emptyStars)}
-                          </p>
+                          <div className="flex items-center mt-2">
+                            <p className="text-yellow-500 text-2xl">{getRatingStars(product.reviews)}</p>
+                            <p className="ml-2 text-gray-700 dark:text-gray-300 text-lg">
+                              ({product.reviews.length} {product.reviews.length > 1 ? "reviews" : "review"})
+                            </p>
+                          </div>
+
                         );
                       })()}
-                      <p className="ml-2 text-gray-700 dark:text-gray-300 text-lg">
-                        ({product.reviews.length} {product.reviews.length > 1 ? "reviews" : "review"})
-                      </p>
+
                     </>
                   ) : (
                     <p className="text-gray-500 text-2xl">{"☆".repeat(5)}</p> // Empty stars when no reviews

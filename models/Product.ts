@@ -2,10 +2,10 @@
 import mongoose, { Document, Schema, Types } from "mongoose";
 
 export interface IReview {
-  user: Types.ObjectId; // Reference to the User model
-  rating: number; // Rating between 1 and 5
-  comment: string; // Review text
-  createdAt: Date; // Timestamp of the review
+  user: Types.ObjectId;
+  rating: number; 
+  comment: string; 
+  createdAt: Date; 
 }
 
 export interface IProduct extends Document {
@@ -15,7 +15,7 @@ export interface IProduct extends Document {
   category: string;
   sizes?: string[];
   images: string[];
-  reviews: IReview[]; // Array of reviews
+  reviews: IReview[]; 
 }
 
 const productSchema = new Schema<IProduct>({

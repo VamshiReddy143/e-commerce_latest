@@ -64,17 +64,17 @@ export default function RegisterPage() {
       backgroundPosition: "center",
       backgroundRepeat: "no-repeat",
     }} className="flex flex-col items-center  justify-center h-screen">
-      <h1 className="text-4xl font-bold mb-4 ">SIGN UP</h1>
+      <h1 className="text-4xl  font-bold mb-4 ">SIGN UP</h1>
 
       <form
         className="flex flex-col items-center p-10 gap-3 rounded-xl shadow-lg
-                   bg-white/20 backdrop-blur-md border border-white/30"
+                   bg-white/0 backdrop-blur-md border border-white/20"
         onSubmit={handleSubmit(onSubmit)}
       >
         {/* Name Field */}
         <input
           {...register("name")}
-          className="text-black px-5 p-2 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-violet-500"
+          className="text-black bg-transparent border border-gray-400  px-5 p-2 rounded-xl w-full focus:outline-none  "
           type="text"
           placeholder="Name"
         />
@@ -83,7 +83,7 @@ export default function RegisterPage() {
         {/* Email Field */}
         <input
           {...register("email")}
-          className="text-black px-5 p-2 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-violet-500"
+          className="text-black bg-transparent border border-gray-400  px-5 p-2 rounded-xl w-full focus:outline-none focus:ring-2 focus:ring-violet-500"
           type="email"
           placeholder="Email"
         />
@@ -92,7 +92,7 @@ export default function RegisterPage() {
         {/* Password Field */}
         <input
           {...register("password")}
-          className="text-black px-5 p-2 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-violet-500"
+          className="text-black bg-transparent border border-gray-400  px-5 p-2 rounded-xl w-full focus:outline-none focus:ring-2 focus:ring-violet-500"
           type="password"
           placeholder="Password"
         />
@@ -100,7 +100,7 @@ export default function RegisterPage() {
 
         {/* Submit Button */}
         <button
-          className="bg-violet-600 py-2 px-4 rounded-xl mt-4 text-white hover:bg-violet-700 transition"
+          className="bg-red-600 py-3 px-10 rounded-xl mt-4 text-white hover:bg-red-700 transition"
           type="submit"
           disabled={isSubmitting}
         >
@@ -131,7 +131,7 @@ export default function RegisterPage() {
       {/* Login Redirect */}
       <div className="flex mt-5 gap-2">
         <p className="text-white">Already have an account?</p>
-        <button onClick={() => router.push("/login")} className="text-[#bc9fdf]">
+        <button onClick={() => router.push("/login")} className="text-red-400 font-bold">
           Login
         </button>
       </div>

@@ -1,8 +1,12 @@
 "use client";
-import Loader from "@/components/Loader";
-import { useEffect, useState } from "react";
+
+import { Suspense, useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
+
+const Loader = dynamic(() => import("@/components/Loader"), { ssr: false });
+
 
 interface Order {
   _id: string;
@@ -22,21 +26,24 @@ const AdminOrdersPage = () => {
   const [loading, setLoading] = useState(true);
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
 
+
+  const fetchOrders = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin/orders");
+      if (!res.ok) throw new Error("Failed to fetch orders");
+      const data = await res.json();
+      setOrders(data);
+    } catch {
+      toast.error("Error fetching orders.");
+    } finally {
+      setLoading(false);
+    }
+  }, [])
+
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const res = await fetch("/api/admin/orders");
-        if (!res.ok) throw new Error("Failed to fetch orders");
-        const data = await res.json();
-        setOrders(data);
-      } catch (error) {
-        toast.error("Error fetching orders.");
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchOrders();
-  }, []);
+  }, [fetchOrders]);
+
 
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     try {
@@ -57,7 +64,7 @@ const AdminOrdersPage = () => {
       );
 
       toast.success("Order status updated!");
-    } catch (error) {
+    } catch {
       toast.error("Failed to update order.");
     }
   };
@@ -72,22 +79,25 @@ const AdminOrdersPage = () => {
       if (!res.ok) throw new Error("Failed to delete order");
       setOrders((prev) => prev.filter((o) => o._id !== orderId));
       toast.success("Order deleted.");
-    } catch (error) {
+    } catch {
       toast.error("Failed to delete order.");
     }
   };
 
-  if (loading) {
-    return (
+
+    <Suspense fallback={<Loader />} >
+      <AdminOrdersPage />
+    </Suspense>
+
+    if(loading) return (
       <div className="flex items-center justify-center h-screen">
         <Loader />
       </div>
-    );
-  }
+    )
+  
 
   return (
     <div className="sm:max-w-6xl text-gray-900 dark:text-white mx-auto sm:p-4 ">
-      {/* Empty State */}
       {orders.length === 0 ? (
         <p className="text-gray-500 dark:text-white text-center">No orders found.</p>
       ) : (
@@ -100,7 +110,6 @@ const AdminOrdersPage = () => {
               transition={{ duration: 0.4 }}
               className="bg-white dark:bg-black p-4 sm:p-6 rounded-lg shadow-md"
             >
-              {/* Order Summary */}
               <div
                 onClick={() =>
                   setExpandedOrder(expandedOrder === order._id ? null : order._id)
@@ -115,20 +124,19 @@ const AdminOrdersPage = () => {
                 </div>
                 <div>
                   <span
-                    className={`px-3 py-1 rounded-full text-sm font-bold ${
-                      order.status === "Pending"
-                        ? "bg-yellow-200 text-yellow-800"
-                        : order.status === "Shipped"
+                    className={`px-3 py-1 rounded-full text-sm font-bold ${order.status === "Pending"
+                      ? "bg-yellow-200 text-yellow-800"
+                      : order.status === "Shipped"
                         ? "bg-blue-200 text-blue-800"
                         : "bg-green-200 text-green-800"
-                    }`}
+                      }`}
                   >
                     {order.status}
                   </span>
                 </div>
               </div>
 
-              {/* Order Details (Expandable) */}
+
               {expandedOrder === order._id && (
                 <motion.div
                   initial={{ height: 0, opacity: 0 }}
@@ -161,7 +169,7 @@ const AdminOrdersPage = () => {
                     >
                       Mark as Shipped
                     </motion.button>
-                    
+
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       onClick={() => updateOrderStatus(order._id, "Delivered")}

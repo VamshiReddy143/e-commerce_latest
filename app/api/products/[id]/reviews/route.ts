@@ -4,10 +4,13 @@ import { ProductModel } from "@/models/Product";
 import mongoose from "mongoose";
 import dbConnect from "@/lib/mongodb";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const params = await context.params;
+  const { id } = params;
   try {
     await dbConnect();
-    const { id } = params;
+
+   
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ message: "Invalid product ID" }, { status: 400 });
@@ -27,11 +30,12 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 
 
 // app/api/products/[id]/reviews/route.ts
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest,  context: { params: Promise<{ id: string }> }) {
+  const params = await context.params;
+  const { id } = params;
     try {
       await dbConnect();
       
-      const { id } = params;
   
       if (!mongoose.Types.ObjectId.isValid(id)) {
         return NextResponse.json({ message: "Invalid product ID" }, { status: 400 });
@@ -39,8 +43,12 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   
       const body = await req.json();
       const { userId, rating, comment } = body;
+
+      if(!userId){
+        return NextResponse.json({ message: "please login to post a review" }, { status: 400 });
+      }
   
-      if (!userId || !rating || !comment) {
+      if (!rating || !comment) {
         return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
       }
   
@@ -55,11 +63,12 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
         return NextResponse.json({ message: "You have already reviewed this product" }, { status: 400 });
       }
   
-      // Add the new review
+      
       product.reviews.push({
         user: userId,
         rating: parseInt(rating),
         comment,
+        createdAt: new Date(),
       });
   
       await product.save();

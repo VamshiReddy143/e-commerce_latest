@@ -6,8 +6,20 @@ import Order from "@/models/Order";
 import Cart from "@/models/Cart";
 
 
+interface CartItem {
+  productId: {
+    _id: string;
+    name: string;
+    price: number;
+    images: string[];
+  };
+  quantity: number;
+  size: string;
+  
+}
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: "2023-10-16",
+  apiVersion: "2025-01-27.acacia",
 });
 
 export async function POST(req: Request) {
@@ -25,7 +37,7 @@ export async function POST(req: Request) {
     }
 
     // Construct line items for Stripe
-    const lineItems = cartItems.map((item: any) => ({
+    const lineItems = cartItems.map((item: CartItem) => ({
       price_data: {
         currency: "usd",
         product_data: {
@@ -55,7 +67,7 @@ export async function POST(req: Request) {
     // Save the order to the database
     const order = new Order({
       userId: session.user.id,
-      items: cartItems.map((item: any) => ({
+      items: cartItems.map((item: CartItem) => ({
         productId: item.productId._id,
         name: item.productId.name,
         price: item.productId.price,
@@ -64,10 +76,10 @@ export async function POST(req: Request) {
         image: item.productId.images[0],
       })),
       totalAmount: cartItems.reduce(
-        (acc: number, item: any) => acc + item.productId.price * item.quantity,
+        (acc: number, item: CartItem) => acc + item.productId.price * item.quantity,
         0
       ),
-      status: "Pending", // Default status
+      status: "Pending", 
     });
 
     await order.save();
@@ -76,12 +88,12 @@ export async function POST(req: Request) {
     await Cart.deleteMany({ userId: session.user.id });
 
     return NextResponse.json({ sessionId: stripeSession.id });
-  } catch (error: any) {
-    console.error("Stripe Checkout Error:", error);
+  } catch (error: unknown ) {
+    if(error instanceof Error) return NextResponse.json({ error: error.message }, { status: 400 });
 
-    if (error.type === "StripeInvalidRequestError") {
-      return NextResponse.json({ error: error.message }, { status: 400 });
-    }
+    // if (error.type === "StripeInvalidRequestError") {
+    //   return NextResponse.json({ error: error.message }, { status: 400 });
+    // }
 
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }

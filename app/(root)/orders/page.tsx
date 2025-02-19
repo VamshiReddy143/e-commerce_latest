@@ -29,16 +29,26 @@ const OrdersPage = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
+
+
+  const statusColors: Record<string, string> = {
+    Pending: "text-yellow-500",
+    Shipped: "text-blue-500",
+    Delivered: "text-green-500",
+  };
+
+
   useEffect(() => {
     if (!session?.user) return;
 
     const fetchOrders = async () => {
+      setLoading(true);
       try {
-        const res = await fetch("/api/orders");
+        const res = await fetch("/api/orders", { cache: "no-store" });
         if (!res.ok) throw new Error("Failed to fetch orders");
         const data = await res.json();
         setOrders(data);
-      } catch (error) {
+      } catch {
         toast.error("Failed to load orders.");
       } finally {
         setLoading(false);
@@ -46,7 +56,7 @@ const OrdersPage = () => {
     };
 
     fetchOrders();
-  }, [session]);
+  }, [session?.user]);
 
   if (!session?.user) {
     return <p className="text-center text-gray-500 mt-10">Please log in to view your orders.</p>;
@@ -74,13 +84,13 @@ const OrdersPage = () => {
   }
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 10 }} 
-      animate={{ opacity: 1, y: 0 }} 
-      transition={{ duration: 0.5 }} 
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
       className="max-w-6xl mx-auto p-6"
     >
-      <h1 className="text-4xl font-bold  mb-6">Your Orders</h1>
+
 
       <div className="space-y-8">
         {orders.map((order) => (
@@ -111,6 +121,7 @@ const OrdersPage = () => {
                     alt={item.name}
                     width={80}
                     height={80}
+                    priority={true}
                     className="rounded-lg object-cover shadow-md"
                   />
                   <div className="flex-1">
@@ -123,17 +134,10 @@ const OrdersPage = () => {
             </div>
 
             <div className="mt-4 flex justify-between items-center">
-              <p
-                className={`text-lg font-semibold ${
-                  order.status === "Pending"
-                    ? "text-yellow-500"
-                    : order.status === "Shipped"
-                    ? "text-blue-500"
-                    : "text-green-500"
-                }`}
-              >
+              <p className={`text-lg font-semibold ${statusColors[order.status]}`}>
                 🚚 Status: {order.status}
               </p>
+
               <Link href={`/orders/${order._id}`} className="text-blue-500 hover:underline">
                 🔍 View Details
               </Link>

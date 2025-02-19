@@ -15,6 +15,17 @@ import toast from "react-hot-toast";
 import Loader from "@/components/Loader";
 import { motion } from "framer-motion";
 
+interface MonthlySale {
+  _id: string; 
+  total: number; 
+}
+
+interface BestSeller {
+  _id: string; 
+  total: number; 
+}
+
+
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
     totalRevenue: 0,
@@ -33,7 +44,7 @@ const AdminDashboard = () => {
         if (!res.ok) throw new Error("Failed to fetch stats");
         const data = await res.json();
         setStats(data);
-      } catch (error) {
+      } catch{
         toast.error("Error fetching analytics.");
       } finally {
         setLoading(false);
@@ -104,7 +115,7 @@ const StatCard = ({ title, value, color }: { title: string; value: string | numb
 };
 
 // Monthly Sales Graph Component
-const MonthlySalesGraph = ({ monthlySales }: { monthlySales: any[] }) => {
+const MonthlySalesGraph = ({ monthlySales }: { monthlySales: MonthlySale[] }) => {
   const calculateGrowthRate = () => {
     if (monthlySales.length < 2) return 0;
     const currentMonth = monthlySales[monthlySales.length - 1]?.total || 0;
@@ -141,7 +152,7 @@ const MonthlySalesGraph = ({ monthlySales }: { monthlySales: any[] }) => {
 };
 
 // Best Selling Products Chart Component
-const BestSellersChart = ({ bestSellers }: { bestSellers: any[] }) => {
+const BestSellersChart = ({ bestSellers }: { bestSellers: BestSeller[] }) => {
   return (
     <motion.div
       initial={{ opacity: 0 }}

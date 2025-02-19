@@ -1,5 +1,4 @@
 "use client";
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { getRandomColor } from "@/utils/randomColor";
@@ -8,33 +7,13 @@ interface Review {
   user: { name: string; image?: string };
   rating: number;
   comment: string;
-  createdAt: string;
+  createdAt:Date | string;
 }
 
-const ReviewList = ({ productId }: { productId: string }) => {
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [loading, setLoading] = useState(true);
 
+
+const ReviewList = ({ reviews }: { reviews: Review[] }) => {
   const getInitials = (name: string) => name.charAt(0).toUpperCase();
-
-  useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const res = await fetch(`/api/products/${productId}/reviews`);
-        if (!res.ok) throw new Error("Failed to fetch reviews");
-        const data = await res.json();
-        setReviews(data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchReviews();
-  }, [productId]);
-
-  if (loading) return <p className="text-gray-500 text-center">Loading reviews...</p>;
 
   return (
     <motion.div
@@ -49,7 +28,7 @@ const ReviewList = ({ productId }: { productId: string }) => {
           {reviews.map((review, index) => (
             <motion.li
               key={index}
-              className="border  border-gray-300 dark:border-gray-600 p-4 rounded-lg shadow-md bg-white dark:bg-gray-800"
+              className="border border-gray-300 dark:border-gray-600 p-4 rounded-lg shadow-md bg-white dark:bg-gray-800"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
@@ -66,7 +45,7 @@ const ReviewList = ({ productId }: { productId: string }) => {
                 ) : (
                   <div
                     className="w-12 h-12 flex items-center justify-center rounded-full text-white font-bold text-lg"
-                    style={{ backgroundColor: getRandomColor(review.user.name) }} // Unique color
+                    style={{ backgroundColor: getRandomColor(review.user.name) }}
                   >
                     {getInitials(review.user.name)}
                   </div>
@@ -74,7 +53,7 @@ const ReviewList = ({ productId }: { productId: string }) => {
 
                 <div>
                   <p className="font-bold text-lg">{review.user.name}</p>
-                  <p className="text-sm text-gray-500">{new Date(review.createdAt).toLocaleDateString()}</p>
+                  <p className="text-sm dark:text-gray-400 text-gray-500">{new Date(review.createdAt).toLocaleDateString()}</p>
                 </div>
               </div>
               <p className="text-yellow-500 text-xl mt-2">

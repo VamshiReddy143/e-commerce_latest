@@ -8,6 +8,8 @@ import emptycart from "@/public/cart.png";
 import Loader from "@/components/Loader";
 import { motion } from "framer-motion";
 import BestSeller from "@/components/BestSeller";
+import Link from "next/link";
+
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string);
 
@@ -31,10 +33,19 @@ const CartPage = () => {
   const discount = 10;
   const deliveryFee = 50;
 
+
+  const BestSellerMemo = useMemo(() => <BestSeller />, []);
+
+
   useEffect(() => {
     const fetchCart = async () => {
       try {
         const res = await fetch("/api/cart", { cache: "no-store" });
+        if (res.status === 401) { // User is not logged in
+          setCart([]); // Set empty cart instead of showing an error
+          setLoading(false);
+          return;
+        }
         if (!res.ok) throw new Error("Failed to fetch cart items");
         const data = await res.json();
         setCart(data);
@@ -67,28 +78,34 @@ const CartPage = () => {
     }
   };
 
-  const updateQuantity = async (cartItemId: string, newQuantity: number) => {
-    if (newQuantity < 1) return;
-    setUpdating(true);
-    try {
-      const res = await fetch(`/api/cart/${cartItemId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ quantity: newQuantity }),
-      });
-      if (!res.ok) throw new Error("Failed to update quantity");
-      setCart((prevCart) =>
-        prevCart.map((item) =>
-          item._id === cartItemId ? { ...item, quantity: newQuantity } : item
-        )
-      );
-      toast.success("Quantity updated");
-    } catch (error) {
-      toast.error((error as Error).message);
-    } finally {
-      setUpdating(false);
+  const updateQuantity =async (cartItemId: string, newQuantity: number) => {
+      if (newQuantity < 1) return;
+      setUpdating(true);
+      try {
+        const res = await fetch(`/api/cart/${cartItemId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ quantity: newQuantity }),
+        })
+  
+        if (!res.ok) throw new Error("Failed to update quantity");
+  
+        setCart((prevCart) =>
+          prevCart.map((item) =>
+            item._id === cartItemId ? { ...item, quantity: newQuantity } : item
+          )
+        );
+        toast.success("Quantity updated");
+      } catch (error) {
+        toast.error((error as Error).message);
+      } finally {
+        setUpdating(false);
+      }
     }
-  };
+    
+  
+  
+  
 
   const removeItem = async (cartItemId: string) => {
     setUpdating(true);
@@ -118,19 +135,21 @@ const CartPage = () => {
   }
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 10 }} 
-      animate={{ opacity: 1, y: 0 }} 
-      transition={{ duration: 0.5 }} 
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
       className="  mx-auto p-6"
     >
-      
+
 
       {cart.length === 0 ? (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-          <div className="flex items-center justify-center">
+          <Link href={"/pages/shop"}>
+          <div className="flex items-center justify-center cursor-pointer">
             <Image src={emptycart} alt="empty_cart" height={400} width={400} />
           </div>
+          </Link>
         </motion.div>
       ) : (
         <div className="flex flex-col   lg:flex-row gap-8">
@@ -146,10 +165,25 @@ const CartPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {cart.map((item) => (
+                  {cart.length > 0 && cart.map((item) => (
                     <tr key={item._id} className="border-t dark:border-gray-500 ">
                       <td className="p-4 flex items-center gap-4">
-                        <Image src={item.productId.images[0]} alt={item.productId.name} width={60} height={60} className="rounded-lg" />
+                        {item.productId && item.productId.images?.length > 0 ? (
+                          <Image
+                            src={item.productId.images[0]}
+                            alt={item.productId.name}
+                            width={60}
+                            height={60}
+                            priority={false}
+                            placeholder="blur"
+                            blurDataURL="https://imgs.search.brave.com/Dwe3RRvsmgqv_lNOqfaBWV6Xg4H0PePpXZeQEGReeJM/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzAzLzQ1LzA1Lzky/LzM2MF9GXzM0NTA1/OTIzMl9DUGllVDhS/SVdPVWs0SnFCa2tX/a0lFVFlBa216MmI3/NS5qcGc"
+                            className="rounded-lg"
+                          />
+                        ) : (
+                          <div className="w-16 h-16 bg-gray-300 flex items-center justify-center rounded-lg">
+                            <span className="text-gray-700">No Image</span>
+                          </div>
+                        )}
                         <div>
                           <h2 className="text-lg font-semibold">{item.productId.name}</h2>
                           <p className="text-sm text-gray-600">Size: {item.size}</p>
@@ -176,10 +210,10 @@ const CartPage = () => {
           </motion.div>
 
           {/* Order Summary */}
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            transition={{ duration: 0.5 }} 
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
             className="lg:w-80 p-6 border dark:border-gray-500 flex flex-col gap-2 rounded-lg shadow-lg"
           >
             <h2 className="text-xl font-bold mb-4">Order Summary</h2>
@@ -193,7 +227,7 @@ const CartPage = () => {
       )}
 
       <div>
-        <BestSeller/>
+      {BestSellerMemo}
       </div>
       <Toaster />
     </motion.div>

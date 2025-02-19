@@ -10,6 +10,11 @@ import dbConnect from "@/lib/mongodb";
 import { authOptions } from "@/app/auth/authOptions";
 import cloudinary from "@/lib/cloudinary";
 
+interface CloudinaryUploadResponse {
+    secure_url: string;
+  }
+  
+
 export async function POST(request: NextRequest) {
     try {
         await dbConnect();
@@ -46,8 +51,8 @@ export async function POST(request: NextRequest) {
             const buffer = Buffer.from(arrayBuffer);
       
             const uploadStream = () =>
-              new Promise<any>((resolve, reject) => {
-                const stream = cloudinary.uploader.upload_stream((error, result) => {
+              new Promise<CloudinaryUploadResponse>((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream((error, result: CloudinaryUploadResponse) => {
                   if (error) {
                     return reject(error);
                   }
@@ -79,7 +84,7 @@ export async function POST(request: NextRequest) {
 
 
 
-export async function GET(req: NextRequest) {
+export async function GET() {
     try {
         await dbConnect();
 

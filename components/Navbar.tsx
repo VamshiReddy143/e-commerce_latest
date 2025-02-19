@@ -9,15 +9,23 @@ import Theme from "./Theme";
 import { FaStore, FaEnvelope } from "react-icons/fa6";
 import { FaInfoCircle } from "react-icons/fa";
 import { MdHome } from "react-icons/md";
+import { useSession } from "next-auth/react";
+
+interface User {
+  name?: string;
+  isAdmin?: boolean;
+}
 
 const Navbar = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { data: session } = useSession();
+  const [loading, setLoading] = useState(true);
 
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
 
   const debouncedSearch = useDebounce(searchQuery, 300);
 
@@ -36,21 +44,24 @@ const Navbar = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch("/api/auth/session");
+        const res = await fetch("/api/auth/session",{cache:"no-store"});
         if (!res.ok) throw new Error("Failed to fetch user");
         const data = await res.json();
         setUser(data.user);
-      } catch (error) {
+      } catch  {
         console.error("User not logged in");
+        setUser(null);
+      }finally{
+        setLoading(false);
       }
     };
     fetchUser();
   }, []);
 
   const handleLogout = async () => {
-    await fetch("/api/auth/logout");
+    await fetch("/api/auth/logout", { method: "POST", cache: "no-store" });
     setUser(null);
-    router.push("/login");
+    router.replace("/login"); 
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,7 +94,8 @@ const Navbar = () => {
     }
     setOpen((prev) => !prev);
   };
-
+  
+  if (loading) return null; 
   return (
     <>
       <div className="flex dark:text-white dark:bg-gray-900 justify-between items-center rounded-xl p-4 sm:p-5">
@@ -174,9 +186,13 @@ const Navbar = () => {
               </div>
             </Link>
           ))}
-          <Link href="/cart" className="relative">
+         {
+          session && (
+            <Link href="/cart" className="relative">
             <FaCartShopping size={20} />
           </Link>
+          )
+         }
         </div>
       </div>
       <div className="p-3 sm:hidden relative w-full sm:w-[500px]">

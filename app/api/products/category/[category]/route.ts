@@ -2,11 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { ProductModel } from "@/models/Product";
 import dbConnect from "@/lib/mongodb";
 
-export async function GET(req: NextRequest, { params }: { params: { category?: string } }) {
+export async function GET(req: NextRequest,context: { params: Promise<{ category?: string }> }) {
+
+  const params = await context.params;
   try {
     await dbConnect();
     
-    console.log("Received params:", params); // Debugging
+   
 
     if (!params?.category) {
       return NextResponse.json({ message: "Category is required" }, { status: 400 });

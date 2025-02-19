@@ -68,14 +68,14 @@ export default function LoginPage() {
 
       <form
          className="flex flex-col items-center p-10 gap-3 rounded-xl shadow-lg
-                   bg-white/20 backdrop-blur-md border border-white/30"
+                   bg-white/0 backdrop-blur-md border border-white/20"
         onSubmit={handleSubmit(onSubmit)}
       >
         <input
           {...register("email")}
           type="email"
           placeholder="Email"
-          className="text-black px-5 p-2 rounded-md w-full focus:outline-none"
+          className="text-black bg-transparent border border-gray-400 rounded-xl px-5 p-2  w-full focus:outline-none"
         />
         {errors.email && <p className="text-red-500">{errors.email.message}</p>}
 
@@ -83,12 +83,12 @@ export default function LoginPage() {
           {...register("password")}
           type="password"
           placeholder="Password"
-          className="text-black px-5 p-2 rounded-md w-full focus:outline-none"
+          className="text-black bg-transparent border border-gray-400 rounded-xl px-5 p-2  w-full focus:outline-none"
         />
         {errors.password && <p className="text-red-500">{errors.password.message}</p>}
 
         <button
-          className="py-2 px-4 rounded-xl mt-4 text-white bg-violet-600"
+          className="py-2 px-6 rounded-xl mt-4 text-white bg-red-600"
           type="submit"
           disabled={isSubmitting}
         >
@@ -98,7 +98,7 @@ export default function LoginPage() {
 
       <div className="flex mt-2 gap-2">
         <p className="text-white">Don&apos;t have an account?</p>
-        <button onClick={() => router.push("/register")} className="text-[#bc9fdf]">
+        <button onClick={() => router.push("/register")} className="text-red-400 font-bold">
           Register
         </button>
       </div>

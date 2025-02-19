@@ -7,6 +7,7 @@ export interface IUser extends Document {
   isAdmin: boolean;
   image: string;
   googleId?: string;
+  
 }
 
 const userSchema = new Schema<IUser>({

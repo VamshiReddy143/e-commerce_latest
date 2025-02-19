@@ -6,6 +6,9 @@ import { Session, User as NextAuthUser } from "next-auth";
 import type { NextAuthOptions } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import dbConnect from "@/lib/mongodb";
+import type { Account } from "next-auth";
+
+
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -51,7 +54,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user, account }: { token: JWT; user?: NextAuthUser; account?: any }) {
+    async jwt({ token, user, account }: { token: JWT; user?: NextAuthUser; account?: Account | null }) {
       await dbConnect();
 
       if (account?.provider === "google") {
@@ -69,12 +72,12 @@ export const authOptions: NextAuthOptions = {
         }
 
         token.id = existingUser._id.toString();
-        token.isAdmin = existingUser.isAdmin; // Add isAdmin here
+        token.isAdmin = existingUser.isAdmin; 
       } else if (user) {
         token.id = user.id;
         token.email = user.email;
         token.name = user.name;
-        token.isAdmin = user?.isAdmin; // Add isAdmin here
+        token.isAdmin = user?.isAdmin ?? false;
       }
 
       return token;
@@ -82,10 +85,10 @@ export const authOptions: NextAuthOptions = {
 
     async session({ session, token }: { session: Session; token: JWT }) {
       if (session.user) {
-        session.user.id = token.id as string;
-        session.user.email = token.email as string;
-        session.user.name = token.name as string;
-        session.user.isAdmin = token.isAdmin as boolean; // Add isAdmin here
+        session.user.id = token.id;
+        session.user.email = token.email;
+        session.user.name = token.name;
+        session.user.isAdmin = token.isAdmin ?? false; 
       }
       return session;
     },
