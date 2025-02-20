@@ -74,7 +74,7 @@ const CategoryPage = () => {
 
 
   return (
-    <div className="text-black p-10">
+    <div className="text-black dark:text-white p-10">
       {/* <h1 className="text-3xl font-bold mb-6 capitalize">{category} Collection</h1> */}
       {error && (
         <div className="text-center text-red-500">

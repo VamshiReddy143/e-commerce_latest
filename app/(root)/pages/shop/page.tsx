@@ -52,7 +52,7 @@ const Page = () => {
 
   if (error) return <p className="text-red-500 text-center mt-10">Error: {error}</p>;
   return (
-    <div className="mx-auto mb-[6em] p-6">
+    <div className=" mb-[6em] ml-1 p-6">
       {/* Sorting Options */}
       <div className="flex justify-between mb-6">
         <select

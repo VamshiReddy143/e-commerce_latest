@@ -1,4 +1,4 @@
-"use client"; // ✅ Required for client components in Next.js 15
+"use client"; 
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
@@ -48,11 +48,11 @@ const Hero: React.FC = () => {
   // Auto slide every 5 seconds
   useEffect(() => {
     const interval = setInterval(nextSlide, 5000);
-    return () => clearInterval(interval); // Cleanup interval on unmount
+    return () => clearInterval(interval); 
   }, []);
 
   return (
-    <div className="bg-gray-200  sm:p-10 mt-10 rounded-[30px] relative">
+    <div className="bg-gray-200   sm:p-10 mt-10 rounded-[30px] relative">
       {/* Content Section */}
       <div className="flex flex-col mb-4 sm:mb-10 ml-4 sm:ml-10 p-4 sm:p-10">
         <h3 className="text-black font-bold text-lg sm:text-3xl ">
@@ -103,3 +103,6 @@ const Hero: React.FC = () => {
 };
 
 export default Hero;
+
+
+

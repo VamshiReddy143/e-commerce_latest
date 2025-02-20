@@ -8,11 +8,11 @@ import station from "@/public/playstation.png";
 import vr from "@/public/vr.png";
 import bt from "@/public/bluetooth.png";
 
-const Category = () => {
+const Category: React.FC = () => {
   return (
-    <div className="mt-8 sm:p-0 p-4">
+    <div className="mt-8  sm:p-0 p-4">
       {/* First Row */}
-      <div className="grid grid-cols-1 sm:flex gap-6">
+      <div className="grid grid-cols-1   sm:flex gap-6">
         <Link href="/categories/headphones">
           <div className="first bg-black cursor-pointer w-full sm:w-fit p-5 rounded-[30px] flex flex-col sm:flex-row items-center">
             <div className="text-center sm:text-left">
@@ -57,7 +57,7 @@ const Category = () => {
       </div>
 
       {/* Second Row */}
-      <div className="grid grid-cols-1 sm:flex gap-6 mt-8">
+      <div className="grid grid-cols-1   sm:flex gap-6 mt-8">
         <Link href="/categories/gaming">
           <div className="first bg-gray-200 cursor-pointer w-full sm:w-[100%] p-5 rounded-[30px] flex flex-col sm:flex-row justify-between items-center">
             <div className="text-center sm:text-left">
@@ -73,7 +73,7 @@ const Category = () => {
         </Link>
 
         <Link href="/categories/futuristic">
-          <div className="first bg-green-400 cursor-pointer w-full sm:w-fit p-5 rounded-[30px] flex flex-col sm:flex-row items-center">
+          <div className="first bg-green-400 cursor-pointer w-full  p-5 rounded-[30px] flex flex-col sm:flex-row items-center">
             <div className="text-center sm:text-left">
               <p className="font-bold text-gray-500">Play</p>
               <h2 className="text-xl sm:text-2xl font-bold text-white">Game</h2>
@@ -87,7 +87,7 @@ const Category = () => {
         </Link>
 
         <Link href="/categories/soundbar">
-          <div className="first bg-blue-500 cursor-pointer w-full sm:w-fit p-5 rounded-[30px] flex flex-col sm:flex-row items-center">
+          <div className=" bg-blue-500 cursor-pointer w-full   p-5 rounded-[30px] flex flex-col sm:flex-row items-center">
             <div className="text-center sm:text-left">
               <p className="font-bold text-gray-100">New</p>
               <h2 className="text-xl sm:text-3xl font-bold text-gray-100">Amazon</h2>

@@ -45,7 +45,7 @@ export default function Home() {
       <section className=" mx-auto px-4 py-16">
         <div className="text-center mb-12">
           <h1 className="text-3xl font-bold mb-4"><strong className="border-b-4 border-red-500">Connect</strong> with Our Team</h1>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="text-gray-400 max-w-2xl mx-auto">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sollicitudin felis luctus malesuada mattis, purus leo dolu.
           </p>
         </div>
@@ -73,7 +73,7 @@ export default function Home() {
           {/* Contact Details */}
           <div>
             <h2 className="text-2xl font-semibold mb-6">Contact Details</h2>
-            <p className="text-gray-600 mb-8">
+            <p className="text-gray-400 mb-8">
               Lorem ipsum dolor sit amet, consecteur turis ole adip iscing vipu deit elit taras felius neal saret tame tal mericoper dei materio denta low luce.
             </p>
 
@@ -84,7 +84,7 @@ export default function Home() {
                 </div>
                 <div>
                   <p className="font-medium">Address</p>
-                  <p className="text-gray-600">Jl. Raya Kuta No. 121</p>
+                  <p className="text-gray-400">Jl. Raya Kuta No. 121</p>
                 </div>
               </div>
 
@@ -94,7 +94,7 @@ export default function Home() {
                 </div>
                 <div>
                   <p className="font-medium">Availability</p>
-                  <p className="text-gray-600">Daily 09 am - 05 pm</p>
+                  <p className="text-gray-400">Daily 09 am - 05 pm</p>
                 </div>
               </div>
 
@@ -104,7 +104,7 @@ export default function Home() {
                 </div>
                 <div>
                   <p className="font-medium">Mobile</p>
-                  <p className="text-gray-600">(+62)1 789 345</p>
+                  <p className="text-gray-400">(+62)1 789 345</p>
                 </div>
               </div>
 
@@ -114,7 +114,7 @@ export default function Home() {
                 </div>
                 <div>
                   <p className="font-medium">Email</p>
-                  <p className="text-gray-600">admin@support.com</p>
+                  <p className="text-gray-400">admin@support.com</p>
                 </div>
               </div>
             </div>
@@ -138,7 +138,7 @@ export default function Home() {
           <div>
             <div className="text-center md:text-left mb-8">
               <h2 className="text-3xl font-bold mb-4">Your Common Queries Answered with Additional FAQs</h2>
-              <p className="text-gray-600">
+              <p className="text-gray-400">
                 Lorem ipsum dolor sit amet, consectetur adipis cingit lan vipurel elit. Ut elit taras felius luctu neal em corper mat tra pulvinar.
               </p>
             </div>

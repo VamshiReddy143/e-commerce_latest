@@ -10,13 +10,13 @@ import sale from "@/public/sale.jpg"
 
 export default function Home() {
   return (
-    <main className="min-h-screen dark:bg-black bg-white">
+    <main className="min-h-screen dark:text-white  dark:bg-black bg-white">
       {/* Hero Section */}
       <section className=" mx-auto px-4 py-16">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
             <h1 className="text-5xl font-bold mb-6">About Us</h1>
-            <p className="text-gray-600 text-lg">
+            <p className=" text-lg">
               Discover a world of endless shopping possibilities with curated collections and exclusive deals.
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, blanditiis eaque! Saepe inventore, nihil distinctio tempore ullam, obcaecati officia dolores, laudantium harum provident repudiandae quidem asperiores quibusdam error! Earum corrupti veritatis rem impedit porro nisi nam quaerat voluptas at ipsum. Incidunt repudiandae aperiam doloribus in reprehenderit accusantium! Id quisquam aut cum suscipit fugit? Officiis minus aperiam porro, molestiae maxime accusantium, neque quisquam maiores fugit eveniet sequi reiciendis beatae, unde sapiente placeat itaque nostrum explicabo nisi aliquam nemo quas molestias quis. Reprehenderit, numquam? Ad quos, iure maxime, perferendis totam quo mollitia quas dolore et ab aliquam dolorum esse beatae, nobis ducimus.
             </p>
@@ -45,7 +45,7 @@ export default function Home() {
           </div>
           <div>
             <h2 className="text-3xl font-bold mb-6">Discover a World of Shopping Excellence</h2>
-            <p className="text-gray-600 mb-6">
+            <p className=" mb-6">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
             </p>
             <div className="grid grid-cols-2 gap-4">
@@ -79,9 +79,9 @@ export default function Home() {
       <section className="bg-gray-50 dark:bg-black py-16">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
-            <p className="text-sm font-semibold text-gray-500 uppercase mb-2">ACHIEVEMENTS</p>
+            <p className="text-sm font-semibold text-gray-400 uppercase mb-2">ACHIEVEMENTS</p>
             <h2 className="text-3xl font-bold mb-4">Smart Shopping Solutions</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className=" max-w-2xl mx-auto">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.
             </p>
           </div>
@@ -98,15 +98,15 @@ export default function Home() {
             <div className="grid grid-cols-3 gap-8 text-center">
               <div>
                 <p className="text-4xl font-bold mb-2">35k+</p>
-                <p className="text-gray-600">Happy Customers</p>
+                <p className="text-gray-300">Happy Customers</p>
               </div>
               <div>
                 <p className="text-4xl font-bold mb-2">625+</p>
-                <p className="text-gray-600">Products</p>
+                <p className="text-gray-300">Products</p>
               </div>
               <div>
                 <p className="text-4xl font-bold mb-2">5,678</p>
-                <p className="text-gray-600">Orders Delivered</p>
+                <p className="text-gray-300">Orders Delivered</p>
               </div>
             </div>
           </div>

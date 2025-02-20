@@ -9,7 +9,7 @@ import Theme from "./Theme";
 import { FaStore, FaEnvelope } from "react-icons/fa6";
 import { FaInfoCircle } from "react-icons/fa";
 import { MdHome } from "react-icons/md";
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
 
 interface User {
   name?: string;
@@ -20,7 +20,7 @@ const Navbar = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
   const [loading, setLoading] = useState(true);
 
   const [open, setOpen] = useState(false);
@@ -39,6 +39,7 @@ const Navbar = () => {
     { name: "About Us", path: "/contactUs", icon: <FaInfoCircle size={20} /> },
     { name: "Contact Us", path: "/contact", icon: <FaEnvelope size={20} /> },
     { name: "Orders", path: "/orders", icon: <FaEnvelope size={20} /> },
+    {name:"Cart",path:"/cart",icon:<FaCartShopping size={20}/>},
   ];
 
   useEffect(() => {
@@ -94,14 +95,14 @@ const Navbar = () => {
     }
     setOpen((prev) => !prev);
   };
-  
+
   if (loading) return null; 
   return (
     <>
       <div className="flex dark:text-white dark:bg-gray-900 justify-between items-center rounded-xl p-4 sm:p-5">
         <div className="flex gap-6 sm:gap-10 items-center">
           <Link href={"/"}>
-            <h1 className="text-xl sm:text-3xl font-serif text-red-400">PHOLEX</h1>
+            <h1 className="text-xl sm:text-5xl font-serif text-red-400">PHOLEX</h1>
           </Link>
           <ul className="hidden sm:flex gap-6 sm:gap-10">
             {navLinks.map((link, index) => (
@@ -159,12 +160,12 @@ const Navbar = () => {
                   {user.name?.charAt(0).toUpperCase()}
                 </div>
               </Link>
-              <button onClick={handleLogout} className="hidden sm:block text-red-500 hover:text-red-700">
+              <button onClick={handleLogout} className=" sm:block text-red-500 hover:text-red-700">
                 Logout
               </button>
             </div>
           ) : (
-            <Link href="/login" className="hidden sm:block hover:text-red-400">
+            <Link href="/login" className=" sm:block hover:text-red-400">
               Login
             </Link>
           )}
@@ -174,6 +175,7 @@ const Navbar = () => {
 
           <Link href={"/cart"} className="hidden sm:block relative">
             <FaCartShopping size={20} />
+            
           </Link>
         </div>
 
@@ -186,13 +188,16 @@ const Navbar = () => {
               </div>
             </Link>
           ))}
-         {
-          session && (
-            <Link href="/cart" className="relative">
+         
+        
+            {/* <Link href="/cart" className="relative">
+            <div className="flex flex-col items-center">
             <FaCartShopping size={20} />
-          </Link>
-          )
-         }
+            <p>cart</p>
+            </div>
+          </Link> */}
+        
+         
         </div>
       </div>
       <div className="p-3 sm:hidden relative w-full sm:w-[500px]">
