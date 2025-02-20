@@ -7,6 +7,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
+import toast, { Toaster } from "react-hot-toast";
 
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -39,22 +40,25 @@ export default function RegisterPage() {
         });
 
         if (!loginResponse || loginResponse.error) {
-          return alert("Login failed: " + loginResponse?.error);
+          toast.error("Login failed: " + loginResponse?.error);
+          return;
         }
 
-        router.push("/profile");
+        toast.success("Registration successful!");
+        router.push("/");
       } else {
-        alert(response.data.message || "Registration failed");
+        toast.error(response.data.message || "Registration failed");
+        
       }
-    } catch (err) {
-      console.error("Registration Error:", err);
-      alert("Something went wrong. Please try again.");
+    } catch {
+      toast.dismiss();
+      toast.error("Something went wrong. Please try again.");
     }
   };
 
   const handleGoogleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    signIn("google", { callbackUrl: "/profile" });
+    signIn("google", { callbackUrl: "/" });
   };
 
   return (
@@ -134,6 +138,7 @@ export default function RegisterPage() {
         <button onClick={() => router.push("/login")} className="text-red-400 font-bold">
           Login
         </button>
+      <Toaster  position="top-center" reverseOrder={false} />
       </div>
     </div>
   );

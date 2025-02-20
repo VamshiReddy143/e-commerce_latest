@@ -5,6 +5,9 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react"; 
+import toast, { Toaster } from "react-hot-toast";
+import Image from "next/image";
+
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email format"),
@@ -38,23 +41,29 @@ export default function LoginPage() {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.message || "Invalid credentials");
+        toast.error(result.error || "Invalid credentials");
       }
 
-      // Use `signIn` from NextAuth to create session after successful login
+     
       await signIn("credentials", {
         email: data.email,
         password: data.password,
-        redirect: false, // Do not automatically redirect
+        redirect: false, 
       });
 
-      // Redirect to profile page after successful login
-      router.push("/profile");
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        console.error("Login Error:", err.message);
-      }
+      
+      toast.success("Login successful!");
+      router.push("/");
+    } catch {
+      toast.dismiss();
+      toast.error("Something went wrong. Please try again.");
     }
+  };
+
+  const handleGoogleSignIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    toast.loading("Redirecting to Google...");
+    signIn("google", { callbackUrl: "/profile" });
   };
 
   return (
@@ -94,6 +103,23 @@ export default function LoginPage() {
         >
           {isSubmitting ? "Logging in..." : "Login"}
         </button>
+
+        <div className="h-[2px] mt-2 bg-white w-full" />
+
+        <button
+          type="button"
+          onClick={handleGoogleSignIn}
+          className="bg-white flex items-center gap-3 py-2 px-4 rounded-xl mt-4 text-black hover:bg-gray-100 transition"
+        >
+          <Image
+            src="/google.png"
+            alt="Google Logo"
+            width={24}
+            height={24}
+            className="h-6 w-6"
+          />
+          Sign in with Google
+        </button>
       </form>
 
       <div className="flex mt-2 gap-2">
@@ -102,6 +128,7 @@ export default function LoginPage() {
           Register
         </button>
       </div>
+      <Toaster/>
     </div>
   );
 }
